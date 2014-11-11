@@ -12,6 +12,7 @@ class master:
         self.dsetname=dsetname
         print("master>>init() dsetname: {}".format(dsetname))
 #creat dview
+        print("master>> create dview")
         # init cluster client
         self.clients = parallel.Client(packer='pickle')
         self.clients.block = True
@@ -19,14 +20,17 @@ class master:
         self.dview.block = True
 #engine init
         #self.eng=engine()
+        print("master>> init engine")
         self.dview.execute('from %s import dataset'%dsetname)
         self.dview.execute('dset=dataset()')
         self.dview.execute('from scengine import engine')
         self.dview.execute('eng=engine(dset)')
-        #dont need to gather
-        self.engs=self.dview.gather('eng')
-        print("master>>engs:\n{}".format(self.engs))
-        
+#dont need to gather
+#        print("master>> gather engines")        
+#        self.engs=self.dview.gather('eng')
+#        print("master>>engs:\n{}".format(self.engs))
+#init local variables
+        print("master>> init local variables")         
         self.minbagsize=2
         self.maxdepth=30        
         self.queue=None
