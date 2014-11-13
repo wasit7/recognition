@@ -67,10 +67,10 @@ def recall(dsetname='ss', rfile=''):
         
         if  cL== L:
             correct=correct+1
-            
-            print("\n%03d: correct L"%cL)
-            for i in xrange(len(ids)):
-                print("%03d_%03d"%(ids[i],100*p[ids[i]])),
+            if cL!=0:
+                print("\n%03d: correct L"%cL)
+                for i in xrange(len(ids)):
+                    print("%03d_%03d"%(ids[i],100*p[ids[i]])),
 
         dset.setL(x,L)
     print("recall rate: {}%".format(correct/float(dset.size)*100))
