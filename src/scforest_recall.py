@@ -8,7 +8,7 @@ Created on Thu Nov 13 22:47:53 2014
 import os
 import pickle
 from sctree import tree
-from ss import dataset
+from ss_recall import dataset
 import numpy as np
 rootdir="ss"
 #load the trees
@@ -32,7 +32,8 @@ def loadForest():
     return forest,npic
 
 
-
+from PIL import Image
+import matplotlib.pyplot as plt
 #init
 forest,npic=loadForest()
 dset=dataset()
@@ -40,27 +41,42 @@ dset=dataset()
 ntree=npic
 clmax=len(forest[0].getP([0],dset))
 correct=0;
-sum_on_object=0
-for x in xrange(dset.size):
+for im in xrange(len(dset.imgf)):
     p=np.zeros(clmax)
-    cL=dset.getL(x)
-#print prob
-    for i in xrange(ntree):
-        p=p+forest[i].getP(np.array([x]),dset)
-    p=p/float(ntree)
+    for j in xrange(dset.spi):
+        x=im*dset.spi+j
+        cL=dset.getL(x)
+    #print prob
+        for i in xrange(ntree):
+            p=p+forest[i].getP(np.array([x]),dset)
+        p=p/np.sum(p)
     ids = p.argsort()[::-1][:11]
     L=ids[0]        
-    
+    for j in xrange(dset.spi):
+        x=im*dset.spi+j
+        dset.setL(x,L)
 #print max likelihood
     #L=t.getL(np.array([x]),dset)
-    if cL!=0:
-        sum_on_object=sum_on_object+1
-        if(any(ids==cL)):
-            correct=correct+1
-        
-            print("\n%03d: correct L"%cL)
-            for i in xrange(len(ids)):
-                print("%03d_%03d"%(ids[i],100*p[ids[i]])),
-
-    dset.setL(x,L)
-print("\n--> recall rate: {}%".format(correct/float(sum_on_object)*100))
+    plt.figure(1)
+    im=np.array(Image.open(dset.imgf[im]).convert('L'))
+    plt.imshow(im)
+    plt.set_cmap('gray')
+    plt.show()
+    
+    plt.figure(2)
+    print ("\n%s\n"%dset.imgf[im]),
+    for i in xrange(len(ids)):
+        print("[%03d]%03d "%(ids[i],100*p[ids[i]])),
+    i=0    
+    while 1:
+        if i>=10:
+            break
+        if ids[i]!=0:
+            plt.subplot(i/5,5,i)
+            im_icon=np.array(Image.open("icons/%3d.jpg").convert('L'))
+            plt.imshow(im)
+            i=i+1
+    plt.set_cmap('gray')
+    plt.show()
+    plt.figure(1)
+    plt.ginput(1)
