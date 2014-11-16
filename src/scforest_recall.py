@@ -41,10 +41,11 @@ dset=dataset()
 ntree=npic
 clmax=len(forest[0].getP([0],dset))
 correct=0;
-for im in xrange(len(dset.imgf)):
+plt.close('all')
+for id_im in xrange(len(dset.imgf)):
     p=np.zeros(clmax)
     for j in xrange(dset.spi):
-        x=im*dset.spi+j
+        x=id_im*dset.spi+j
         cL=dset.getL(x)
     #print prob
         for i in xrange(ntree):
@@ -53,30 +54,35 @@ for im in xrange(len(dset.imgf)):
     ids = p.argsort()[::-1][:11]
     L=ids[0]        
     for j in xrange(dset.spi):
-        x=im*dset.spi+j
+        x=id_im*dset.spi+j
         dset.setL(x,L)
 #print max likelihood
     #L=t.getL(np.array([x]),dset)
+    
     plt.figure(1)
-    im=np.array(Image.open(dset.imgf[im]).convert('L'))
+    im=np.array(Image.open(dset.imgf[id_im]).convert('L'))
     plt.imshow(im)
     plt.set_cmap('gray')
     plt.show()
+    plt.axis('off')
     
     plt.figure(2)
-    print ("\n%s\n"%dset.imgf[im]),
+    print ("\n%s\n"%dset.imgf[id_im]),
     for i in xrange(len(ids)):
         print("[%03d]%03d "%(ids[i],100*p[ids[i]])),
-    i=0    
+    i=0
+    j=0    
     while 1:
-        if i>=10:
+        if j>=10:
             break
         if ids[i]!=0:
-            plt.subplot(i/5,5,i)
-            im_icon=np.array(Image.open("icons/%3d.jpg").convert('L'))
-            plt.imshow(im)
-            i=i+1
-    plt.set_cmap('gray')
+            plt.subplot(2,5,j)
+            im_icon=np.array(Image.open("icons/%03d.jpg"%ids[i]).convert('L'))
+            plt.imshow(im_icon)
+            plt.axis('off')
+            j=j+1
+        i=i+1
+    plt.set_cmap('gray')    
     plt.show()
     plt.figure(1)
     plt.ginput(1)

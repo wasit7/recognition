@@ -15,7 +15,7 @@ except ImportError:
     import simplejson as json
 
 num_img=100
-spi=20
+spi=50
 
 rootdir="dataset"
 mrec=64
