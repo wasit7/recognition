@@ -56,3 +56,5 @@ target/
 #script
 *.bat
 dataset/
+*.out
+*.pic
