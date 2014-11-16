@@ -1,4 +1,6 @@
 """
+GNU GENERAL PUBLIC LICENSE Version 2
+
 Created on Mon Oct 13 18:56:19 2014
 
 @author: Wasit

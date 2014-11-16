@@ -1,3 +1,10 @@
+"""
+GNU GENERAL PUBLIC LICENSE Version 2
+
+Created on Mon Oct 13 18:50:34 2014
+
+@author: Wasit
+"""
 import sys
 import pickle
 from scmaster import master

@@ -1,4 +1,6 @@
 """
+GNU GENERAL PUBLIC LICENSE Version 2
+
 Created on Mon Oct 13 18:50:34 2014
 
 @author: Wasit
@@ -16,7 +18,9 @@ class master:
         # init cluster client
         self.clients = parallel.Client(packer='pickle')
         self.clients.block = True
-        self.dview = self.clients.direct_view(self.clients.ids[1:])
+        #0 use master as engine
+        #1 donot use master as engine
+        self.dview = self.clients.direct_view(self.clients.ids[3:])
         self.dview.block = True
 #engine init
         #self.eng=engine()
@@ -32,7 +36,7 @@ class master:
 #init local variables
         print("master>> init local variables")         
         self.minbagsize=2
-        self.maxdepth=30        
+        self.maxdepth=20        
         self.queue=None
         self.root=None
         self.node=None
